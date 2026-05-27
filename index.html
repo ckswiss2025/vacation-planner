@@ -37,19 +37,6 @@
             </div>
         </div>
 
-        <div id="editTripModal" class="modal hidden">
-            <div class="modal-content">
-                <h2>Edit Trip</h2>
-                <form id="editTripForm">
-                    <input type="text" id="editTripName" placeholder="Trip name" required>
-                    <div class="modal-buttons">
-                        <button type="submit" class="btn btn-primary">Save Changes</button>
-                        <button type="button" class="btn btn-secondary" onclick="closeModal('editTripModal')">Cancel</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-
         <div id="importModal" class="modal hidden">
             <div class="modal-content">
                 <h2>Import/Export</h2>
@@ -72,6 +59,18 @@
             </div>
         </div>
 
+        <div id="moveToShoppingModal" class="modal hidden">
+            <div class="modal-content">
+                <h2>Move to Shopping List</h2>
+                <p>When do you need to buy this item?</p>
+                <div class="modal-buttons">
+                    <button class="btn btn-primary" onclick="confirmMoveToShopping('before')">Buy Before Trip</button>
+                    <button class="btn btn-primary" onclick="confirmMoveToShopping('during')">Buy During Trip</button>
+                    <button class="btn btn-secondary" onclick="closeModal('moveToShoppingModal')">Cancel</button>
+                </div>
+            </div>
+        </div>
+
         <main class="main-container" id="mainContent">
             <nav class="tabs">
                 <button class="tab-btn active" data-tab="trip-details">Trip Details</button>
@@ -84,13 +83,7 @@
 
             <!-- Trip Details Tab -->
             <section id="trip-details" class="tab-content active">
-                <div class="trip-header">
-                    <h2 id="tripTitle">Trip Details</h2>
-                    <div class="trip-actions">
-                        <button class="btn btn-secondary btn-small" id="editTripBtn" onclick="openEditTripModal()">✏️ Edit Name</button>
-                        <button class="btn btn-danger btn-small" id="deleteTripBtn" onclick="deleteCurrentTrip()">🗑️ Delete Trip</button>
-                    </div>
-                </div>
+                <h2>Trip Details</h2>
                 <div class="trip-details-grid">
                     <div class="detail-card">
                         <h3>Destination</h3>
@@ -270,12 +263,14 @@
             <!-- Notes Tab -->
             <section id="notes" class="tab-content">
                 <h2>Trip Notes & History</h2>
-                <textarea id="tripNotes" class="notes-textarea" placeholder="Add notes about this trip, lessons learned, what to improve next time, etc."></textarea>
-                <button class="btn btn-primary" onclick="saveNotes()">Save Notes</button>
+                <div class="notes-input-section">
+                    <textarea id="tripNotes" class="notes-textarea" placeholder="Add a new note about this trip..."></textarea>
+                    <button class="btn btn-primary" onclick="addNewNote()">+ Add Note</button>
+                </div>
                 
-                <div class="history-section">
-                    <h3>Historical Trips</h3>
-                    <div id="historicalTrips" class="historical-list"></div>
+                <div class="notes-history-section">
+                    <h3>All Notes (Most Recent First)</h3>
+                    <div id="notesHistoryContainer" class="notes-history-list"></div>
                 </div>
             </section>
         </main>
