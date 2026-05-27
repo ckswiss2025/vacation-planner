@@ -37,6 +37,19 @@
             </div>
         </div>
 
+        <div id="editTripModal" class="modal hidden">
+            <div class="modal-content">
+                <h2>Edit Trip</h2>
+                <form id="editTripForm">
+                    <input type="text" id="editTripName" placeholder="Trip name" required>
+                    <div class="modal-buttons">
+                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                        <button type="button" class="btn btn-secondary" onclick="closeModal('editTripModal')">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
         <div id="importModal" class="modal hidden">
             <div class="modal-content">
                 <h2>Import/Export</h2>
@@ -71,7 +84,13 @@
 
             <!-- Trip Details Tab -->
             <section id="trip-details" class="tab-content active">
-                <h2>Trip Details</h2>
+                <div class="trip-header">
+                    <h2 id="tripTitle">Trip Details</h2>
+                    <div class="trip-actions">
+                        <button class="btn btn-secondary btn-small" id="editTripBtn" onclick="openEditTripModal()">✏️ Edit Name</button>
+                        <button class="btn btn-danger btn-small" id="deleteTripBtn" onclick="deleteCurrentTrip()">🗑️ Delete Trip</button>
+                    </div>
+                </div>
                 <div class="trip-details-grid">
                     <div class="detail-card">
                         <h3>Destination</h3>
