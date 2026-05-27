@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vacation Planner</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="manifest" href="manifest.json">
+</head>
+<body>
+    <div id="app">
+        <header class="header">
+            <div class="header-content">
+                <h1>✈️ Vacation Planner</h1>
+                <div class="header-controls">
+                    <select id="tripSelector" class="trip-selector">
+                        <option value="">Select a Trip...</option>
+                    </select>
+                    <button id="newTripBtn" class="btn btn-primary">+ New Trip</button>
+                    <button id="importBtn" class="btn btn-secondary">Import/Export</button>
+                </div>
+            </div>
+        </header>
+
+        <div id="newTripModal" class="modal hidden">
+            <div class="modal-content">
+                <h2>Create New Trip</h2>
+                <form id="newTripForm">
+                    <input type="text" id="tripName" placeholder="e.g., Hawaii 2026" required>
+                    <input type="date" id="tripStartDate" required>
+                    <input type="date" id="tripEndDate" required>
+                    <div class="modal-buttons">
+                        <button type="submit" class="btn btn-primary">Create</button>
+                        <button type="button" class="btn btn-secondary" onclick="closeModal('newTripModal')">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div id="importModal" class="modal hidden">
+            <div class="modal-content">
+                <h2>Import/Export</h2>
+                <div class="import-export-controls">
+                    <div class="control-group">
+                        <label>Export Current Trip:</label>
+                        <button id="exportBtn" class="btn btn-primary">Download JSON</button>
+                    </div>
+                    <div class="control-group">
+                        <label>Import Trip:</label>
+                        <input type="file" id="importFile" accept=".json">
+                        <button id="importFileBtn" class="btn btn-primary">Import</button>
+                    </div>
+                    <div class="control-group">
+                        <label>Duplicate Current Trip:</label>
+                        <button id="duplicateBtn" class="btn btn-primary">Create Copy</button>
+                    </div>
+                </div>
+                <button class="btn btn-secondary" onclick="closeModal('importModal')">Close</button>
+            </div>
+        </div>
+
+        <main class="main-container" id="mainContent">
+            <nav class="tabs">
+                <button class="tab-btn active" data-tab="trip-details">Trip Details</button>
+                <button class="tab-btn" data-tab="packing">Packing</button>
+                <button class="tab-btn" data-tab="shopping">Shopping</button>
+                <button class="tab-btn" data-tab="tasks">Pre-Travel Tasks</button>
+                <button class="tab-btn" data-tab="itinerary">Itinerary & Activities</button>
+                <button class="tab-btn" data-tab="notes">Notes</button>
+            </nav>
+
+            <!-- Trip Details Tab -->
+            <section id="trip-details" class="tab-content active">
+                <h2>Trip Details</h2>
+                <div class="trip-details-grid">
+                    <div class="detail-card">
+                        <h3>Destination</h3>
+                        <input type="text" id="destination" placeholder="e.g., Hawaii" class="detail-input">
+                    </div>
+                    <div class="detail-card">
+                        <h3>Duration</h3>
+                        <input type="text" id="duration" placeholder="3 weeks" class="detail-input" readonly>
+                    </div>
+                    <div class="detail-card">
+                        <h3>Travelers</h3>
+                        <input type="text" id="travelers" placeholder="2 adults, 1 child, 1 infant" class="detail-input">
+                    </div>
+                </div>
+
+                <div class="details-section">
+                    <h3>Flights</h3>
+                    <div class="detail-group">
+                        <label>Outbound Flight:</label>
+                        <input type="text" id="outboundFlight" placeholder="Airline, flight number, date & time" class="detail-input">
+                        <label>Confirmation Code:</label>
+                        <input type="text" id="outboundConfirm" placeholder="Confirmation code" class="detail-input">
+                    </div>
+                    <div class="detail-group">
+                        <label>Return Flight:</label>
+                        <input type="text" id="returnFlight" placeholder="Airline, flight number, date & time" class="detail-input">
+                        <label>Confirmation Code:</label>
+                        <input type="text" id="returnConfirm" placeholder="Confirmation code" class="detail-input">
+                    </div>
+                </div>
+
+                <div class="details-section">
+                    <h3>Accommodations</h3>
+                    <div class="detail-group">
+                        <label>Property/Hotel:</label>
+                        <input type="text" id="accommodation" placeholder="Name and location" class="detail-input">
+                        <label>Address:</label>
+                        <input type="text" id="accommodationAddress" placeholder="Full address" class="detail-input">
+                        <label>Confirmation Code:</label>
+                        <input type="text" id="accommodationConfirm" placeholder="Confirmation code" class="detail-input">
+                        <label>Check-in/Check-out:</label>
+                        <input type="text" id="accommodationDates" placeholder="e.g., Jun 1 - Jun 21" class="detail-input">
+                    </div>
+                </div>
+
+                <div class="details-section">
+                    <h3>Transportation</h3>
+                    <div class="detail-group">
+                        <label>Pickup/Dropoff:</label>
+                        <input type="text" id="groundTransport" placeholder="Company, confirmation code, times" class="detail-input">
+                        <label>Car Rental:</label>
+                        <input type="text" id="carRental" placeholder="Company, dates, confirmation" class="detail-input">
+                    </div>
+                </div>
+
+                <div class="details-section">
+                    <h3>Other Reservations</h3>
+                    <div id="otherReservations" class="reservations-list"></div>
+                    <button class="btn btn-secondary" onclick="addReservation()">+ Add Reservation</button>
+                </div>
+            </section>
+
+            <!-- Packing Tab -->
+            <section id="packing" class="tab-content">
+                <h2>Packing List</h2>
+                <div class="packing-controls">
+                    <button class="btn btn-secondary" onclick="togglePackingType()">Switch: Carrying vs Checking</button>
+                </div>
+
+                <div id="packingListsContainer"></div>
+
+                <div class="add-item-form">
+                    <input type="text" id="newPackingItem" placeholder="Add packing item...">
+                    <select id="packingCategory">
+                        <option value="Clothing">Clothing</option>
+                        <option value="Toiletries">Toiletries</option>
+                        <option value="Electronics">Electronics</option>
+                        <option value="Documents">Documents</option>
+                        <option value="Beach/Water">Beach/Water</option>
+                        <option value="Kids - General">Kids - General</option>
+                        <option value="Kids - Infant">Kids - Infant</option>
+                        <option value="Medications">Medications</option>
+                        <option value="Entertainment">Entertainment</option>
+                        <option value="Other">Other</option>
+                    </select>
+                    <button class="btn btn-primary" onclick="addPackingItem()">Add</button>
+                </div>
+            </section>
+
+            <!-- Shopping Tab -->
+            <section id="shopping" class="tab-content">
+                <h2>Shopping Lists</h2>
+                <div class="shopping-tabs">
+                    <button class="shopping-tab active" data-shopping="before">Buy Before Trip</button>
+                    <button class="shopping-tab" data-shopping="during">Buy During Trip</button>
+                </div>
+
+                <div id="shoppingListsContainer"></div>
+
+                <div class="add-item-form">
+                    <input type="text" id="newShoppingItem" placeholder="Add shopping item...">
+                    <select id="shoppingCategory">
+                        <option value="Groceries">Groceries</option>
+                        <option value="Sunscreen/Topicals">Sunscreen/Topicals</option>
+                        <option value="Medications">Medications</option>
+                        <option value="Kids Items">Kids Items</option>
+                        <option value="Activities/Entertainment">Activities/Entertainment</option>
+                        <option value="Household Items">Household Items</option>
+                        <option value="Other">Other</option>
+                    </select>
+                    <select id="shoppingTiming">
+                        <option value="before">Before Trip</option>
+                        <option value="during">During Trip</option>
+                    </select>
+                    <button class="btn btn-primary" onclick="addShoppingItem()">Add</button>
+                </div>
+            </section>
+
+            <!-- Pre-Travel Tasks Tab -->
+            <section id="tasks" class="tab-content">
+                <h2>Pre-Travel Tasks</h2>
+                <div class="task-category-controls">
+                    <button class="btn btn-secondary" onclick="addTaskCategory()">+ Add Category</button>
+                </div>
+
+                <div id="tasksContainer"></div>
+
+                <div class="add-item-form">
+                    <input type="text" id="newTask" placeholder="Add task...">
+                    <select id="taskCategory">
+                        <option value="Home Prep">Home Prep</option>
+                        <option value="Before Leaving">Before Leaving</option>
+                        <option value="Health/Safety">Health/Safety</option>
+                        <option value="Administrative">Administrative</option>
+                        <option value="Other">Other</option>
+                    </select>
+                    <button class="btn btn-primary" onclick="addTask()">Add</button>
+                </div>
+            </section>
+
+            <!-- Itinerary & Activities Tab -->
+            <section id="itinerary" class="tab-content">
+                <h2>Itinerary & Activities</h2>
+                <div class="itinerary-sections">
+                    <div class="itinerary-section">
+                        <h3>Places to Visit</h3>
+                        <div id="placesToVisitList" class="places-list"></div>
+                        <div class="add-item-form">
+                            <input type="text" id="newPlace" placeholder="Add place to visit...">
+                            <input type="text" id="placeNotes" placeholder="Notes, hours, etc.">
+                            <button class="btn btn-primary" onclick="addPlace()">Add</button>
+                        </div>
+                    </div>
+
+                    <div class="itinerary-section">
+                        <h3>Restaurants & Dining</h3>
+                        <div id="restaurantsList" class="places-list"></div>
+                        <div class="add-item-form">
+                            <input type="text" id="newRestaurant" placeholder="Add restaurant...">
+                            <input type="text" id="restaurantNotes" placeholder="Type, notes, reservation needed?">
+                            <button class="btn btn-primary" onclick="addRestaurant()">Add</button>
+                        </div>
+                    </div>
+
+                    <div class="itinerary-section">
+                        <h3>Daily Schedule</h3>
+                        <div id="scheduleList" class="schedule-list"></div>
+                        <div class="add-item-form">
+                            <input type="date" id="scheduleDate">
+                            <input type="text" id="scheduleEvent" placeholder="What's happening?">
+                            <button class="btn btn-primary" onclick="addScheduleEvent()">Add Event</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Notes Tab -->
+            <section id="notes" class="tab-content">
+                <h2>Trip Notes & History</h2>
+                <textarea id="tripNotes" class="notes-textarea" placeholder="Add notes about this trip, lessons learned, what to improve next time, etc."></textarea>
+                <button class="btn btn-primary" onclick="saveNotes()">Save Notes</button>
+                
+                <div class="history-section">
+                    <h3>Historical Trips</h3>
+                    <div id="historicalTrips" class="historical-list"></div>
+                </div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <p>Last saved: <span id="lastSaved">Never</span></p>
+            <button id="saveBtn" class="btn btn-primary">💾 Save All</button>
+        </footer>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
