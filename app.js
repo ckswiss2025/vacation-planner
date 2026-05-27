@@ -4,56 +4,126 @@ let currentPackingType = 'carrying';
 let currentShoppingFilter = 'before';
 
 const DEFAULT_PACKING_TEMPLATE = {
-    'Documents': ['Passport', 'Travel insurance documents', 'Flight confirmations', 'Hotel confirmations', 'Driver\'s license', 'Credit cards & cash', 'Vaccination records'],
-    'Clothing': ['Lightweight shirts/tank tops', 'Shorts', 'Sundresses', 'Lightweight pants', 'Underwear', 'Socks', 'Pajamas', 'Light sweater/cardigan', 'Casual shoes', 'Comfortable walking shoes', 'Flip flops/sandals', 'Lightweight jacket for flights'],
-    'Beach/Water': ['Swimsuits (multiple)', 'Beach cover-up', 'Beach bag', 'Water shoes', 'Goggles/snorkel gear'],
-    'Toiletries': ['Sunscreen (SPF 30+)', 'Toothbrush & toothpaste', 'Deodorant', 'Shampoo & conditioner', 'Body wash', 'Moisturizer', 'Lip balm with SPF', 'Feminine hygiene products', 'Hair brush', 'Hair ties', 'Nail clippers'],
-    'Medications': ['Prescription medications', 'Ibuprofen/pain relief', 'Antihistamines', 'Antacids', 'Hydrocortisone cream', 'Band-aids', 'First aid kit'],
-    'Electronics': ['Phone & charger', 'Laptop/tablet (if needed)', 'Camera', 'Portable charger', 'Headphones', 'Travel adapter', 'USB-C cables'],
-    'Kids - General': ['Extra clothing', 'Comfortable shoes', 'Lightweight jacket', 'Hat/visor', 'Backpack for day trips', 'Sunglasses', 'Favorite stuffed animal', 'Books/coloring books', 'Colored pencils/crayons'],
-    'Kids - Infant': ['Diapers (bring extra)', 'Wipes', 'Diaper cream', 'Formula & bottles', 'Sterilizer (if needed)', 'Baby food & spoon', 'Bibs', 'Multiple outfit changes', 'Lightweight sleep sack', 'White noise machine (portable)', 'Baby sunscreen', 'Infant pain reliever', 'Pacifiers'],
-    'Entertainment': ['Books/e-reader', 'Downloaded shows/movies', 'Headphones', 'Travel pillow', 'Eye mask', 'Compression socks'],
-    'Other': ['Travel-sized laundry detergent', 'Wet wipes/hand sanitizer', 'Underwear/socks', 'Reusable water bottle', 'Sunglasses']
+    'Documents': ['Passport', 'Travel insurance documents', 'Flight confirmations', 'Hotel confirmations', 'Driver\'s license', 'Credit cards & cash', 'Vaccination records', 'Car rental agreement', 'Copies of IDs'],
+    'Clothing': ['Lightweight shirts/tank tops (5-6)', 'Shorts (3-4)', 'Sundresses (2-3)', 'Lightweight pants (1-2)', 'Underwear (7-10)', 'Socks (3-4 pairs)', 'Pajamas', 'Light sweater/cardigan', 'Casual shoes', 'Comfortable walking shoes', 'Flip flops/sandals', 'Lightweight jacket for flights', 'Beach cover-up', 'Maxi skirt or casual pants for dinners'],
+    'Beach/Water': ['Swimsuits (2-3)', 'Beach bag', 'Water shoes', 'Goggles/snorkel gear', 'Rash guard or swim shirt', 'Beach towel (microfiber)', 'Waterproof phone case'],
+    'Toiletries': ['Sunscreen (SPF 30+) - bring extra!', 'Toothbrush & toothpaste', 'Deodorant', 'Shampoo & conditioner', 'Body wash', 'Moisturizer', 'Lip balm with SPF', 'Feminine hygiene products', 'Hair brush/comb', 'Hair ties/headband', 'Nail clippers', 'Razor & shaving cream', 'Makeup & makeup remover', 'Face wash', 'Sunscreen lip balm', 'After-sun lotion/aloe', 'Insect repellent/bug spray'],
+    'Medications': ['Prescription medications (in original containers)', 'Ibuprofen/pain relief', 'Antihistamines/allergy medication', 'Antacids', 'Hydrocortisone cream', 'Band-aids & gauze', 'First aid kit', 'Anti-diarrheal medication', 'Motion sickness medication', 'Thermometer'],
+    'Electronics': ['Phone & charger', 'Portable charger/power bank', 'Camera', 'Headphones', 'Travel adapter (universal or type I for Hawaii)', 'USB-C cables', 'Charging cables for all devices', 'Laptop/tablet (if needed)'],
+    'Kids - General': ['Extra clothing (2-3 outfits)', 'Comfortable shoes', 'Lightweight jacket/sweater', 'Hat/visor for sun protection', 'Sunglasses', 'Backpack for day trips', 'Favorite stuffed animal', 'Books/activity books (3-4)', 'Colored pencils/crayons & paper', 'Quiet toys for flights', 'Change of clothes in carry-on', 'Light rain jacket', 'Underwear & socks (7-10 pairs)'],
+    'Kids - Infant': ['Diapers (bring extra! 100+ count)', 'Wipes (2-3 packs)', 'Diaper cream', 'Formula & bottles (enough for trip + extra)', 'Bottle sterilizer (if needed)', 'Baby food & feeding spoon', 'Bibs (5-6)', 'Multiple outfit changes (8-10)', 'Lightweight sleep sack', 'White noise machine (portable)', 'Baby sunscreen SPF 50+', 'Infant pain reliever/fever reducer', 'Pacifiers (5-6 + extras)', 'Burp cloth', 'Onesies & bodysuits (8-10)', 'Socks (10+ pairs)', 'Lightweight blanket/swaddle', 'Nose frida/saline drops', 'Thermometer'],
+    'Entertainment': ['Books/e-reader', 'Downloaded shows/movies on tablet', 'Headphones', 'Travel pillow', 'Eye mask', 'Compression socks', 'Bluetooth speaker (optional)', 'Crosswords/puzzle book'],
+    'Other': ['Travel-sized laundry detergent', 'Wet wipes/hand sanitizer', 'Reusable water bottle', 'Ziplock bags (various sizes)', 'Phone charger cables', 'Travel insurance cards', 'Hotel address written down', 'Emergency contacts list', 'Prescription copies']
 };
 
 const DEFAULT_SHOPPING_TEMPLATE = {
     before: {
-        'Groceries': ['Snacks for flights', 'Medications', 'Sunscreen', 'Insect repellent'],
-        'Kids Items': ['New toys/books for flight', 'Leis or Hawaiian treats to bring', 'Infant formula/food'],
-        'Other': ['Film/camera battery', 'Travel adapters']
+        'Groceries': ['Snacks for flights (nuts, granola bars)', 'Travel-size medications', 'Sunscreen (SPF 30+)', 'Insect repellent', 'Gum/mints for flights'],
+        'Toiletries': ['Travel-size toiletries if needed', 'Extra toothpaste', 'Lip balm with SPF'],
+        'Kids Items': ['New small toys/books for flight entertainment', 'Leis or Hawaiian treats to bring', 'Infant formula (if needed)', 'Specific baby snacks'],
+        'Other': ['Film/camera battery', 'Travel adapters', 'Ziplock bags', 'Plastic bags for wet items']
     },
     during: {
-        'Groceries': ['Water bottles', 'Snacks', 'Fresh fruit', 'Local treats'],
-        'Sunscreen/Topicals': ['After-sun lotion', 'Lip balm'],
-        'Kids Items': ['Sand toys', 'Kids snacks']
+        'Groceries': ['Water bottles (refill bottles you bring)', 'Snacks for beach days', 'Fresh fruit', 'Local treats & souvenirs', 'Coconut water'],
+        'Sunscreen/Topicals': ['After-sun lotion/aloe gel', 'Lip balm', 'Face moisturizer', 'Bug spray if needed'],
+        'Kids Items': ['Sand toys', 'Kids snacks (local)', 'Ice cream/treats', 'Fun beach activities']
     }
 };
 
 const DEFAULT_TASKS_TEMPLATE = {
-    'Home Prep': ['Change bed sheets', 'Clean out refrigerator', 'Take out trash', 'Do laundry', 'Water plants', 'Lock all doors and windows'],
-    'Before Leaving': ['Set thermostat/HVAC to away mode', 'Set security system', 'Cancel/pause deliveries', 'Set mail hold', 'Notify neighbors', 'Pack car/arrange transport', 'Review packing lists'],
-    'Health/Safety': ['Refill prescriptions', 'Check vaccination records', 'Make vet appointments if needed', 'Arrange pet care', 'Inform emergency contact'],
-    'Administrative': ['Confirm all reservations', 'Check flight status', 'Download boarding passes', 'Review hotel check-in info', 'Notify credit card companies of travel', 'Print important documents']
+    'Home Prep': [
+        'Change bed sheets',
+        'Clean out refrigerator - throw away perishables',
+        'Take out trash & recycling',
+        'Do laundry (wash all clothes)',
+        'Water plants or arrange for someone to',
+        'Lock all doors and windows',
+        'Close garage door',
+        'Empty dishwasher',
+        'Clean kitchen counters',
+        'Feed pet/arrange pet sitter'
+    ],
+    'Before Leaving': [
+        'Set thermostat/HVAC to away mode (save energy)',
+        'Set security system',
+        'Cancel/pause mail delivery or arrange with neighbor',
+        'Set mail hold with post office',
+        'Notify trusted neighbor you\'re leaving',
+        'Pack car/arrange transport to airport',
+        'Review all packing lists (use this app!)',
+        'Unplug electronics/appliances',
+        'Close curtains/blinds',
+        'Leave spare house key with trusted person',
+        'Charge all devices before leaving'
+    ],
+    'Health/Safety': [
+        'Refill all prescriptions (with extras)',
+        'Check vaccination records for family members',
+        'Make vet appointments if leaving pets',
+        'Arrange pet care/dog walker if needed',
+        'Inform emergency contact of trip dates',
+        'Check weather forecast for destination',
+        'Get travel insurance (optional but recommended)',
+        'Make dentist appointment if needed (go before trip)'
+    ],
+    'Administrative': [
+        'Confirm all reservations (flights, hotel, car)',
+        'Check flight status 24 hours before',
+        'Download boarding passes',
+        'Review hotel check-in info & policies',
+        'Notify credit card companies of travel dates',
+        'Print or screenshot important confirmations',
+        'Make restaurant reservations where needed',
+        'Register with airline (TSA PreCheck if available)',
+        'Check passport expiration dates',
+        'Make copies of ID & keep separate',
+        'Set up travel alerts on credit cards',
+        'Plan ground transportation to/from airport'
+    ],
+    'Financial': [
+        'Notify bank of travel dates',
+        'Check credit card limits',
+        'Have some local currency exchanged',
+        'Check for bank ATMs at destination',
+        'Review trip insurance options',
+        'Set aside cash in safe location'
+    ],
+    'Clothing & Gear': [
+        'Try on everything that will be packed',
+        'Check weather forecast & pack accordingly',
+        'Get haircut if desired',
+        'Do laundry - ensure all clothes are clean',
+        'Check shoes are broken in (especially for hiking)',
+        'Get pedicure if desired (sandal weather!)'
+    ]
 };
 
 const DEFAULT_ITINERARY_TEMPLATE = {
     places: [
-        { name: 'Diamond Head', notes: 'Hiking trail, 30 minutes, iconic view' },
-        { name: 'Hanauma Bay', notes: 'Snorkeling, marine life, arrive early' },
-        { name: 'Waikiki Beach', notes: 'Main beach, swimming, sunbathing' },
-        { name: 'Pearl Harbor', notes: 'Historic site, book ahead' },
-        { name: 'Volcanoes National Park', notes: 'Crater views, hiking trails' },
-        { name: 'Mauna Kea', notes: 'Stargazing, sunset views' },
-        { name: 'Local Markets', notes: 'KCC Farmers Market, Honolulu International Market' },
-        { name: 'Lanikai Beach', notes: 'Less crowded, twin mountains view' }
+        { name: 'Diamond Head', notes: 'Hiking trail, 30 minutes to summit, iconic view. Open 6am-6pm. $5 entrance. Stroller-friendly trail available.' },
+        { name: 'Hanauma Bay', notes: 'Snorkeling, marine life, arrive early (parking fills up). Rental gear available. $25/person, free for HI residents.' },
+        { name: 'Waikiki Beach', notes: 'Main beach, swimming, sunbathing. Lifeguards on duty. Surfing lessons available. Busy on weekends.' },
+        { name: 'Pearl Harbor', notes: 'Historic WWII site. Book tickets online in advance (free). Allow 3-4 hours. Not stroller-friendly for USS Arizona.' },
+        { name: 'Volcanoes National Park', notes: 'Crater views, hiking trails. 2-hour drive from Honolulu. Entrance $30/car. Bring water & snacks.' },
+        { name: 'Mauna Kea', notes: 'Stargazing, sunset views. High altitude (13,796 ft). Rental car/tour recommended. Tour companies offer trips.' },
+        { name: 'Honolulu International Market', notes: 'Local market with fresh produce, souvenirs, local foods. Open daily. Great for snacks & gifts.' },
+        { name: 'Lanikai Beach', notes: 'Less crowded than Waikiki, twin mountains view. Best for families. 30 min drive from Waikiki.' },
+        { name: 'Manoa Falls Trail', notes: 'Easy hiking trail, 1.6 miles round trip. Rainforest hike with waterfall. Muddy - wear proper shoes.' },
+        { name: 'KCC Farmers Market', notes: 'Saturday farmers market with local food vendors. 7:30am-11am. Great for breakfast & local goods.' },
+        { name: 'Dole Plantation', notes: 'Pineapple plantation tour. Fun for kids. Gift shop & restaurant. 45 min from Honolulu.' },
+        { name: 'Sea Life Park', notes: 'Aquarium & marine life park. Great for kids. Dolphin encounters available. Pre-book online for discounts.' }
     ],
     restaurants: [
-        { name: 'Duke\'s Waikiki', notes: 'Casual seafood, oceanfront' },
-        { name: 'Alan Wong\'s', notes: 'Fine dining, Hawaiian cuisine' },
-        { name: 'Toiro Sushi', notes: 'Fresh sushi, local favorite' },
-        { name: 'Marukame Udon', notes: 'Casual udon noodles' },
-        { name: 'Ramen Yoshimura', notes: 'Local ramen spot' },
-        { name: 'Boots & Kimo\'s', notes: 'Breakfast/brunch' }
+        { name: 'Duke\'s Waikiki', notes: 'Casual seafood, oceanfront, sunset views. Reservation recommended for dinner. Known for kalua pork & fish.' },
+        { name: 'Alan Wong\'s', notes: 'Fine dining, Hawaiian cuisine. Reservations required. Upscale casual. Great for special occasions.' },
+        { name: 'Toiro Sushi', notes: 'Fresh sushi, local favorite. Good for lunch. Not always reservations needed but can get busy.' },
+        { name: 'Marukame Udon', notes: 'Casual udon noodles, affordable. Lines can get long (worth the wait!). Great for families.' },
+        { name: 'Ramen Yoshimura', notes: 'Local ramen spot, popular with locals. Small place, can have lines. Excellent tonkotsu ramen.' },
+        { name: 'Boots & Kimo\'s', notes: 'Breakfast/brunch, casual, locally-owned. Famous for pancakes & fresh acai bowls. Great for families.' },
+        { name: 'Kailani Kailani Grill', notes: 'Local Hawaiian cuisine, family-friendly. Great views. Good for casual lunch or dinner.' },
+        { name: 'The Cheesecake Factory', notes: 'Large portions, great desserts. Good for families. Casual atmosphere. Popular with tourists.' },
+        { name: 'Hank\'s Cafe', notes: 'Local-style plate lunch. Affordable, authentic Hawaiian food. Good for lunch.' },
+        { name: 'Shave Ice at Matsumoto\'s', notes: 'Famous shave ice on North Shore. Small shop, always a line. Worth the drive (1 hour).' }
     ]
 };
 
