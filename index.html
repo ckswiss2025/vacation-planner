@@ -11,7 +11,18 @@
     <div id="app">
         <header class="header">
             <div class="header-content">
-                <h1>✈️ Vacation Planner</h1>
+                <div class="header-title-section">
+                    <h1>✈️ Vacation Planner</h1>
+                    <div id="tripNameDisplay" class="trip-name-display hidden">
+                        <span id="tripNameText" class="trip-name-text"></span>
+                        <button id="editTripNameBtn" class="btn-edit-trip-name">✎</button>
+                    </div>
+                    <div id="tripNameEditForm" class="trip-name-edit-form hidden">
+                        <input type="text" id="tripNameInput" placeholder="Enter trip name" class="trip-name-input">
+                        <button type="button" id="saveTripNameBtn" class="btn-save-trip-name">✓</button>
+                        <button type="button" id="cancelTripNameBtn" class="btn-cancel-trip-name">✕</button>
+                    </div>
+                </div>
                 <div class="header-controls">
                     <select id="tripSelector" class="trip-selector">
                         <option value="">Select a Trip...</option>
@@ -71,6 +82,20 @@
             </div>
         </div>
 
+        <div id="editItemModal" class="modal hidden">
+            <div class="modal-content">
+                <h2>Edit Item</h2>
+                <form id="editItemForm">
+                    <input type="text" id="editItemText" placeholder="Item text" required>
+                    <input type="text" id="editItemNotes" placeholder="Notes (optional)">
+                    <div class="modal-buttons">
+                        <button type="submit" class="btn btn-primary">Save</button>
+                        <button type="button" class="btn btn-secondary" onclick="closeModal('editItemModal')">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
         <main class="main-container" id="mainContent">
             <nav class="tabs">
                 <button class="tab-btn active" data-tab="summary">📋 Summary</button>
@@ -99,10 +124,6 @@
                     <div class="detail-card">
                         <h3>Duration</h3>
                         <input type="text" id="duration" placeholder="3 weeks" class="detail-input" readonly>
-                    </div>
-                    <div class="detail-card">
-                        <h3>Travelers</h3>
-                        <input type="text" id="travelers" placeholder="2 adults, 1 child, 1 infant" class="detail-input">
                     </div>
                 </div>
 
@@ -283,8 +304,7 @@
         </main>
 
         <footer class="footer">
-            <p>Last saved: <span id="lastSaved">Never</span></p>
-            <button id="saveBtn" class="btn btn-primary">💾 Save All</button>
+            <p>Auto-saved</p>
         </footer>
     </div>
 
